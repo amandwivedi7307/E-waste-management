@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - E Kabadi</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">E Kabadi</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#transactions">Transactions</a></li>
+        <li><a href="#logout">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="services" class="services">
+    <h2>Welcome to Your Dashboard</h2>
+    <div class="service-cards">
+      <a href="sell.html" class="card-link">
+        <div class="card">
+          <i class="fas fa-recycle icon"></i>
+          <h3>Sell Your E-Waste</h3>
+          <p>List your e-waste items and get the best price.</p>
+          <button class="cta-button">Start Selling</button>
+        </div>
+      </a>
+
+      <a href="pickup.html" class="card-link">
+        <div class="card">
+          <i class="fas fa-calendar-alt icon"></i>
+          <h3>Schedule Pickup</h3>
+          <p>We pick up your e-waste at your convenience.</p>
+          <button class="cta-button">Schedule Now</button>
+        </div>
+      </a>
+
+      <div class="card">
+        <i class="fas fa-wallet icon"></i>
+        <h3>Get Paid</h3>
+        <p>Receive payment securely after pickup.</p>
+        <button class="cta-button">Payment Options</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard">
+    <h2>Quick Actions</h2>
+    <div class="dashboard-cards">
+      <div class="card">
+        <i class="fas fa-history icon"></i>
+        <h3>View Transactions</h3>
+        <p>Check your past transactions.</p>
+        <button class="cta-button">View History</button>
+      </div>
+
+      <div class="card">
+        <i class="fas fa-user-edit icon"></i>
+        <h3>Profile</h3>
+        <p>Update your personal information.</p>
+        <button class="cta-button">Edit Profile</button>
+      </div>
+
+      <div class="card">
+        <i class="fas fa-question-circle icon"></i>
+        <h3>Help Center</h3>
+        <p>Get answers to your questions.</p>
+        <button class="cta-button">Get Help</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 E Kabadi. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Make entire cards clickable (except when clicking buttons)
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Check if the click was on a button or its child elements
+        if (!e.target.closest('.cta-button')) {
+          const link = this.closest('.card-link');
+          if (link) {
+            window.location.href = link.getAttribute('href');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

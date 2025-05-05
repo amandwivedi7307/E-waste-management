@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Pickup | E-Waste Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00C853;
+            --secondary: #1DE9B6;
+            --dark: #263238;
+            --light: #ECEFF1;
+            --accent: #FF5722;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ECEFF1, #CFD8DC);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .pickup-container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            flex: 1;
+        }
+
+        .pickup-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            flex: 2;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #B0BEC5;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,200,83,0.2);
+        }
+
+        .btn {
+            padding: 1rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00B04D;
+            transform: translateY(-2px);
+        }
+
+        .cart-items {
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            overflow: hidden;
+        }
+
+        .cart-item-img img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .cart-item-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #757575;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-quality {
+            font-size: 0.85rem;
+            color: #1976D2;
+            background: #E3F2FD;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--dark);
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #B0BEC5;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-cart h3 {
+            color: #757575;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Schedule Pickup</h1>
+            <a href="sell.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Marketplace
+            </a>
+        </header>
+
+        <div class="pickup-container">
+            <div class="pickup-form">
+                <h2>Pickup Details</h2>
+                <form id="pickupForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Full Address</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Preferred Pickup Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Preferred Time Slot</label>
+                        <select id="time" name="time" required>
+                            <option value="">Select a time slot</option>
+                            <option value="9am-12pm">9:00 AM - 12:00 PM</option>
+                            <option value="12pm-3pm">12:00 PM - 3:00 PM</option>
+                            <option value="3pm-6pm">3:00 PM - 6:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Additional Notes (Optional)</label>
+                        <textarea id="notes" name="notes" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Confirm Pickup
+                    </button>
+                </form>
+            </div>
+
+            <div class="cart-summary">
+                <h2>Your Items</h2>
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be loaded here -->
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span class="summary-value" id="subtotal">₹0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Pickup Charges</span>
+                    <span class="summary-value">₹200</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total Value</span>
+                    <span class="summary-value" id="total">₹200</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('eWasteCart')) || [];
+        const cartItemsContainer = document.getElementById('cart-items');
+        const subtotalElement = document.getElementById('subtotal');
+        const totalElement = document.getElementById('total');
+
+        // Update cart display
+        function updateCartDisplay() {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add items from the marketplace to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                // Format quality for display
+                const qualityDisplay = item.quality.charAt(0).toUpperCase() + item.quality.slice(1);
+                
+                itemsHTML += `
+                    <div class="cart-item" data-id="${item.id}" data-quality="${item.quality}">
+                        <div class="cart-item-img">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-meta">
+                                <span>${item.category}</span>
+                                <span>≈ ${item.weight}g</span>
+                            </div>
+                            <div class="cart-item-quality">Quality: ${qualityDisplay} (${Math.round(item.multiplier * 100)}%)</div>
+                            <div>Quantity: ${item.quantity}</div>
+                        </div>
+                        <div class="cart-item-price">₹${itemTotal.toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = itemsHTML;
+            subtotalElement.textContent = `₹${subtotal.toLocaleString()}`;
+            totalElement.textContent = `₹${(subtotal + 200).toLocaleString()}`;
+        }
+
+        // Handle form submission
+        document.getElementById('pickupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                notes: document.getElementById('notes').value,
+                items: cart,
+                subtotal: document.getElementById('subtotal').textContent,
+                total: document.getElementById('total').textContent
+            };
+
+            // Here you would typically send this data to your server
+            console.log('Pickup scheduled:', formData);
+            
+            // Show success message
+            alert('Pickup scheduled successfully! Our team will contact you soon.');
+            
+            // Optionally clear the cart after successful submission
+            // cart = [];
+            // localStorage.setItem('eWasteCart', JSON.stringify(cart));
+            // updateCartDisplay();
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').min = today;
+        });
+    </script>
+</body>
+</html>

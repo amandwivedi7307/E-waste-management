@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Marketplace | E Kabadi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00C853;
+            --secondary: #1DE9B6;
+            --dark: #263238;
+            --light: #ECEFF1;
+            --accent: #FF5722;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ECEFF1, #CFD8DC);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--dark);
+            opacity: 0.8;
+            font-size: 1.2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .nav-tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .search-bar {
+            flex: 1;
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 4px 20px rgba(0,200,83,0.2);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        .filter-btn {
+            background: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .item-image {
+            height: 180px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-image img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .item-card:hover .item-image img {
+            transform: scale(1.05);
+        }
+
+        .item-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .item-details {
+            padding: 1.5rem;
+        }
+
+        .item-category {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+
+        .item-condition {
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .item-weight {
+            color: #616161;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .item-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #757575;
+        }
+
+        .quality-selector {
+            margin-bottom: 1rem;
+        }
+
+        .quality-options {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quality-option {
+            flex: 1;
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: 1px solid #B0BEC5;
+            font-size: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quality-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .quality-option:hover:not(.selected) {
+            border-color: var(--primary);
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00B04D;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #B0BEC5;
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Cart Page Styles */
+        .cart-items {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            overflow: hidden;
+        }
+
+        .cart-item-img img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .cart-item-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #757575;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-quality {
+            font-size: 0.85rem;
+            color: #1976D2;
+            background: #E3F2FD;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--dark);
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .cart-item-remove {
+            color: #f44336;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item-remove:hover {
+            transform: scale(1.2);
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Quantity Controls */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            margin: 0 0.5rem;
+            border: none;
+            font-weight: 600;
+        }
+
+        /* Empty Cart State */
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #B0BEC5;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-cart h3 {
+            color: #757575;
+            margin-bottom: 1rem;
+        }
+
+        /* Delay animations for grid items */
+        .item-card:nth-child(1) { animation-delay: 0.1s; }
+        .item-card:nth-child(2) { animation-delay: 0.2s; }
+        .item-card:nth-child(3) { animation-delay: 0.3s; }
+        .item-card:nth-child(4) { animation-delay: 0.4s; }
+        .item-card:nth-child(5) { animation-delay: 0.5s; }
+        .item-card:nth-child(6) { animation-delay: 0.6s; }
+        .item-card:nth-child(7) { animation-delay: 0.7s; }
+        .item-card:nth-child(8) { animation-delay: 0.8s; }
+        .item-card:nth-child(9) { animation-delay: 0.9s; }
+        .item-card:nth-child(10) { animation-delay: 1s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>E-Waste Marketplace</h1>
+            <p class="subtitle">Sell your electronic waste responsibly and get the best value</p>
+        </header>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="marketplace">Marketplace</div>
+            <div class="nav-tab" data-tab="cart">Your Cart <span id="cart-count">0</span></div>
+        </div>
+
+        <!-- Marketplace Tab -->
+        <div class="tab-content active" id="marketplace">
+            <div class="search-filter">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for items...">
+                </div>
+                <button class="filter-btn">
+                    <i class="fas fa-filter"></i>
+                    Filters
+                </button>
+            </div>
+
+            <div class="items-grid">
+                <!-- Item 1 -->
+                <div class="item-card" data-id="1" data-name="iPhone 12 Pro" data-category="Smartphone" data-price="12500" data-weight="164" data-image="https://tse2.mm.bing.net/th?id=OIP.guI-EDP9fr1MUO_pN1jUPwHaLH&pid=Api&P=0&h=180">
+                    <div class="item-image">
+                        <span class="item-badge">Popular</span>
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.guI-EDP9fr1MUO_pN1jUPwHaLH&pid=Api&P=0&h=180" alt="iPhone">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-mobile-alt"></i> Smartphone
+                        </div>
+                        <h3 class="item-name">iPhone 12 Pro</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 164g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">12,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="item-card" data-id="2" data-name="MacBook Air M1" data-category="Laptop" data-price="28000" data-weight="1290" data-image="https://hanoicomputercdn.com/media/product/58386_macbook_air_m1__4_.png">
+                    <div class="item-image">
+                        <img src="https://hanoicomputercdn.com/media/product/58386_macbook_air_m1__4_.png" alt="MacBook">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-laptop"></i> Laptop
+                        </div>
+                        <h3 class="item-name">MacBook Air M1</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Excellent</span>
+                            <span class="item-weight">≈ 1.29kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">28,000</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="item-card" data-id="3" data-name="iPad Pro 11" data-category="Tablet" data-price="15750" data-weight="471" data-image="https://th.bing.com/th/id/OIP.YAS5-3Mvf0mqUQy9uPaNsAHaHa?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <span class="item-badge">Best Value</span>
+                        <img src="https://th.bing.com/th/id/OIP.YAS5-3Mvf0mqUQy9uPaNsAHaHa?rs=1&pid=ImgDetMain" alt="iPad">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-tablet-alt"></i> Tablet
+                        </div>
+                        <h3 class="item-name">iPad Pro 11"</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 471g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">15,750</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="item-card" data-id="4" data-name="Samsung 55 QLED" data-category="Television" data-price="8200" data-weight="18500" data-image="https://images.samsung.com/is/image/samsung/p6pim/uk/qe55q75catxxu/gallery/uk-qled-q70c-qe55q75catxxu-536638584?$650_519_PNG$">
+                    <div class="item-image">
+                        <img src="https://images.samsung.com/is/image/samsung/p6pim/uk/qe55q75catxxu/gallery/uk-qled-q70c-qe55q75catxxu-536638584?$650_519_PNG$" alt="Smart TV">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-tv"></i> Television
+                        </div>
+                        <h3 class="item-name">Samsung 55" QLED</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Damaged</span>
+                            <span class="item-weight">≈ 18.5kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">8,200</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="item-card" data-id="5" data-name="Canon EOS 5D" data-category="Camera" data-price="22000" data-weight="810" data-image="https://th.bing.com/th/id/OIP.hjvqrHi1L_w-nA2zdbij1gHaFy?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.hjvqrHi1L_w-nA2zdbij1gHaFy?rs=1&pid=ImgDetMain" alt="DSLR Camera">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-camera"></i> Camera
+                        </div>
+                        <h3 class="item-name">Canon EOS 5D</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Excellent</span>
+                            <span class="item-weight">≈ 810g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">22,000</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="item-card" data-id="6" data-name="PlayStation 5" data-category="Gaming" data-price="18500" data-weight="4500" data-image="https://th.bing.com/th/id/OIP.hz7TASeeC2PEwiOcMFU3wQHaHa?rs=1&pid=ImgDetMaing">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.hz7TASeeC2PEwiOcMFU3wQHaHa?rs=1&pid=ImgDetMaing" alt="Gaming Console">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-gamepad"></i> Gaming
+                        </div>
+                        <h3 class="item-name">PlayStation 5</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 4.5kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">18,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="item-card" data-id="7" data-name="Apple Watch Series 6" data-category="Wearable" data-price="7800" data-weight="47" data-image="https://th.bing.com/th/id/OIP.4L-V9rTrtP5sLUYDuticqAHaHa?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.4L-V9rTrtP5sLUYDuticqAHaHa?rs=1&pid=ImgDetMain" alt="Smart Watch">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-clock"></i> Wearable
+                        </div>
+                        <h3 class="item-name">Apple Watch Series 6</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Excellent</span>
+                            <span class="item-weight">≈ 47g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">7,800</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="item-card" data-id="8" data-name="AirPods Pro" data-category="Audio" data-price="5200" data-weight="56" data-image="https://i5.walmartimages.com/asr/7e8598be-0a04-4938-98be-765f1fe80447.2f2187eed7001354fb4911fe454dc0d2.jpeg">
+                    <div class="item-image">
+                        <span class="item-badge">New</span>
+                        <img src="https://i5.walmartimages.com/asr/7e8598be-0a04-4938-98be-765f1fe80447.2f2187eed7001354fb4911fe454dc0d2.jpeg" alt="Wireless Earbuds">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-headphones"></i> Audio
+                        </div>
+                        <h3 class="item-name">AirPods Pro</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 56g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">5,200</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="item-card" data-id="9" data-name="HP LaserJet Pro" data-category="Office" data-price="3500" data-weight="9300" data-image="https://th.bing.com/th/id/OIP.isUheDSqM41iscyA8q2T1AHaHa?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.isUheDSqM41iscyA8q2T1AHaHa?rs=1&pid=ImgDetMain" alt="Printer">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-print"></i> Office
+                        </div>
+                        <h3 class="item-name">HP LaserJet Pro</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Damaged</span>
+                            <span class="item-weight">≈ 9.3kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">3,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="item-card" data-id="10" data-name="TP-Link Archer C7" data-category="Networking" data-price="1800" data-weight="680" data-image="https://cdn.mos.cms.futurecdn.net/2e39e2136b94c92be82ea47c6d095723.jpg">
+                    <div class="item-image">
+                        <img src="https://cdn.mos.cms.futurecdn.net/2e39e2136b94c92be82ea47c6d095723.jpg" alt="Router">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-wifi"></i> Networking
+                        </div>
+                        <h3 class="item-name">TP-Link Archer C7</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 680g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">1,800</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 11 -->
+                <div class="item-card" data-id="11" data-name="WD 2TB External HDD" data-category="Storage" data-price="2300" data-weight="230" data-image="https://th.bing.com/th/id/OIP.-hoLwRJSgthp_yR1hF2K2QHaHa?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.-hoLwRJSgthp_yR1hF2K2QHaHa?rs=1&pid=ImgDetMain" alt="External HDD">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-hdd"></i> Storage
+                        </div>
+                        <h3 class="item-name">WD 2TB External HDD</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 230g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">2,300</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 12 -->
+                <div class="item-card" data-id="12" data-name="Dell 27 4K Monitor" data-category="Monitor" data-price="6700" data-weight="6500" data-image="https://th.bing.com/th/id/OIP.hjcrAaWVobDQ79Mc78_5jQHaEq?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.hjcrAaWVobDQ79Mc78_5jQHaEq?rs=1&pid=ImgDetMain" alt="Monitor">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-desktop"></i> Monitor
+                        </div>
+                        <h3 class="item-name">Dell 27" 4K Monitor</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Damaged</span>
+                            <span class="item-weight">≈ 6.5kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">6,700</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 13 -->
+                <div class="item-card" data-id="13" data-name="Samsung Galaxy S21" data-category="Smartphone" data-price="10500" data-weight="169" data-image="https://th.bing.com/th/id/OIP.YknO_mCdceUfDPIcP5bEAQHaJF?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.YknO_mCdceUfDPIcP5bEAQHaJF?rs=1&pid=ImgDetMain" alt="Samsung Phone">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-mobile-alt"></i> Smartphone
+                        </div>
+                        <h3 class="item-name">Samsung Galaxy S21</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 169g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">10,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 14 -->
+                <div class="item-card" data-id="14" data-name="Xbox Series X" data-category="Gaming" data-price="16500" data-weight="4500" data-image="https://th.bing.com/th/id/OIP.ffc9A_ZPTJPNtDUJTmdJOAHaEs?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.ffc9A_ZPTJPNtDUJTmdJOAHaEs?rs=1&pid=ImgDetMain" alt="Xbox">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-gamepad"></i> Gaming
+                        </div>
+                        <h3 class="item-name">Xbox Series X</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 4.5kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">16,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 15 -->
+                <div class="item-card" data-id="15" data-name="Bose QuietComfort 35" data-category="Audio" data-price="6200" data-weight="240" data-image="https://th.bing.com/th/id/OIP.7Cdx5TiWdqBkbfyY4vHqhAHaE8?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.7Cdx5TiWdqBkbfyY4vHqhAHaE8?rs=1&pid=ImgDetMain" alt="Headphones">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-headphones"></i> Audio
+                        </div>
+                        <h3 class="item-name">Bose QuietComfort 35</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Excellent</span>
+                            <span class="item-weight">≈ 240g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">6,200</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 16 -->
+                <div class="item-card" data-id="16" data-name="Dell XPS 13" data-category="Laptop" data-price="24500" data-weight="1200" data-image="https://microless.com/cdn/products/f026b0f0fb6302d095eda73e25215408-hi.jpg">
+                    <div class="item-image">
+                        <img src="https://microless.com/cdn/products/f026b0f0fb6302d095eda73e25215408-hi.jpg" alt="Dell Laptop">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-laptop"></i> Laptop
+                        </div>
+                        <h3 class="item-name">Dell XPS 13</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 1.2kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">24,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 17 -->
+                <div class="item-card" data-id="17" data-name="LG 65 OLED TV" data-category="Television" data-price="11200" data-weight="24000" data-image="https://th.bing.com/th/id/OIP.Wbk_oMQl_EuYk7obOE7_RwHaE6?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.Wbk_oMQl_EuYk7obOE7_RwHaE6?rs=1&pid=ImgDetMain" alt="LG TV">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-tv"></i> Television
+                        </div>
+                        <h3 class="item-name">LG 65" OLED TV</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 24kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">11,200</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 18 -->
+                <div class="item-card" data-id="18" data-name="Nikon D850" data-category="Camera" data-price="28500" data-weight="1005" data-image="https://www.ephotozine.com/articles/nikon-d850-dslr-review-31357/images/highres-Nikon-D850-1_1504519588.jpg">
+                    <div class="item-image">
+                        <img src="https://www.ephotozine.com/articles/nikon-d850-dslr-review-31357/images/highres-Nikon-D850-1_1504519588.jpg" alt="Nikon Camera">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-camera"></i> Camera
+                        </div>
+                        <h3 class="item-name">Nikon D850</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Excellent</span>
+                            <span class="item-weight">≈ 1005g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">28,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 19 -->
+                <div class="item-card" data-id="19" data-name="Samsung Tab S7" data-category="Tablet" data-price="13200" data-weight="500" data-image="https://th.bing.com/th/id/OIP.NVblbrr1NRLOf8uBfrFQFAHaHa?rs=1&pid=ImgDetMain">
+                    <div class="item-image">
+                        <img src="https://th.bing.com/th/id/OIP.NVblbrr1NRLOf8uBfrFQFAHaHa?rs=1&pid=ImgDetMain" alt="Samsung Tablet">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-tablet-alt"></i> Tablet
+                        </div>
+                        <h3 class="item-name">Samsung Tab S7</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 500g</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">13,200</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 20 -->
+                <div class="item-card" data-id="20" data-name="Apple iMac 27" data-category="Desktop" data-price="32500" data-weight="8500" data-image="https://www.bhphotovideo.com/images/images2500x2500/apple_mf885ll_a_27_imac_with_retina_1151657.jpg">
+                    <div class="item-image">
+                        <img src="https://www.bhphotovideo.com/images/images2500x2500/apple_mf885ll_a_27_imac_with_retina_1151657.jpg" alt="iMac">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-category">
+                            <i class="fas fa-desktop"></i> Desktop
+                        </div>
+                        <h3 class="item-name">Apple iMac 27"</h3>
+                        <div class="item-meta">
+                            <span class="item-condition">Good</span>
+                            <span class="item-weight">≈ 8.5kg</span>
+                        </div>
+                        <div class="item-price">
+                            ₹<span class="price-amount">32,500</span> <span>/ unit</span>
+                        </div>
+                        <div class="quality-selector">
+                            <small>Select Quality:</small>
+                            <div class="quality-options">
+                                <div class="quality-option selected" data-quality="excellent" data-multiplier="1.0">Excellent</div>
+                                <div class="quality-option" data-quality="good" data-multiplier="0.8">Good</div>
+                                <div class="quality-option" data-quality="average" data-multiplier="0.6">Average</div>
+                                <div class="quality-option" data-quality="damaged" data-multiplier="0.4">Damaged</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-rupee-sign"></i> Sell Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Tab -->
+        <div class="tab-content" id="cart">
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be added here dynamically -->
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Add items from the marketplace to get started</p>
+                </div>
+            </div>
+
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span class="summary-value" id="subtotal">₹0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Pickup Charges</span>
+                    <span class="summary-value">₹200</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total Value</span>
+                    <span class="summary-value" id="total">₹200</span>
+                </div>
+                <button class="btn btn-primary checkout-btn" onclick="window.location.href='pickup.html'">
+                    <i class="fas fa-calendar-alt"></i> Schedule Pickup
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cart functionality
+        let cart = [];
+        const cartCount = document.getElementById('cart-count');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartSummary = document.getElementById('cart-summary');
+        const subtotalElement = document.getElementById('subtotal');
+        const totalElement = document.getElementById('total');
+
+        // Tab switching
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+                
+                // Update cart count display
+                updateCartCount();
+                
+                // If switching to cart tab, update cart display
+                if (tab.dataset.tab === 'cart') {
+                    updateCartDisplay();
+                }
+            });
+        });
+
+        // Quality selection functionality
+        document.querySelectorAll('.quality-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const optionsContainer = this.parentElement;
+                const itemCard = this.closest('.item-card');
+                const basePrice = parseInt(itemCard.dataset.price);
+                const multiplier = parseFloat(this.dataset.multiplier);
+                const calculatedPrice = Math.round(basePrice * multiplier);
+                
+                // Update selected state
+                optionsContainer.querySelectorAll('.quality-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                // Update displayed price
+                itemCard.querySelector('.price-amount').textContent = calculatedPrice.toLocaleString();
+            });
+        });
+
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const itemCard = button.closest('.item-card');
+                const itemId = itemCard.dataset.id;
+                const itemName = itemCard.dataset.name;
+                const itemCategory = itemCard.dataset.category;
+                const basePrice = parseInt(itemCard.dataset.price);
+                const itemWeight = itemCard.dataset.weight;
+                const itemImage = itemCard.dataset.image;
+                
+                // Get selected quality and multiplier
+                const qualitySelector = itemCard.querySelector('.quality-selector');
+                const selectedQuality = qualitySelector.querySelector('.quality-option.selected');
+                const quality = selectedQuality.dataset.quality;
+                const multiplier = parseFloat(selectedQuality.dataset.multiplier);
+                
+                // Calculate final price based on quality
+                const itemPrice = Math.round(basePrice * multiplier);
+                
+                // Check if item already in cart
+                const existingItem = cart.find(item => item.id === itemId && item.quality === quality);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: itemId,
+                        name: itemName,
+                        category: itemCategory,
+                        price: itemPrice,
+                        basePrice: basePrice,
+                        weight: itemWeight,
+                        image: itemImage,
+                        quality: quality,
+                        multiplier: multiplier,
+                        quantity: 1
+                    });
+                }
+                
+                updateCartCount();
+                showCartNotification(itemName);
+            });
+        });
+
+        // Update cart count display
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+            
+            // Update cart tab text
+            const cartTab = document.querySelector('.nav-tab[data-tab="cart"]');
+            if (count > 0) {
+                cartTab.innerHTML = `Your Cart <span id="cart-count">${count}</span>`;
+            } else {
+                cartTab.innerHTML = 'Your Cart <span id="cart-count">0</span>';
+            }
+        }
+
+        // Show notification when item added to cart
+        function showCartNotification(itemName) {
+            const notification = document.createElement('div');
+            notification.className = 'cart-notification';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i> ${itemName} added to cart
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add items from the marketplace to get started</p>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+                return;
+            }
+            
+            cartSummary.style.display = 'block';
+            
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                // Format quality for display
+                const qualityDisplay = item.quality.charAt(0).toUpperCase() + item.quality.slice(1);
+                
+                itemsHTML += `
+                    <div class="cart-item" data-id="${item.id}" data-quality="${item.quality}">
+                        <div class="cart-item-img">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-meta">
+                                <span>${item.category}</span>
+                                <span>≈ ${item.weight}g</span>
+                            </div>
+                            <div class="cart-item-quality">Quality: ${qualityDisplay} (${Math.round(item.multiplier * 100)}%)</div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus-btn"><i class="fas fa-minus"></i></button>
+                                <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                                <button class="quantity-btn plus-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="cart-item-price">₹${itemTotal.toLocaleString()}</div>
+                        <div class="cart-item-remove">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = itemsHTML;
+            subtotalElement.textContent = `₹${subtotal.toLocaleString()}`;
+            totalElement.textContent = `₹${(subtotal + 200).toLocaleString()}`;
+            
+            // Add event listeners to quantity controls
+            document.querySelectorAll('.minus-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = btn.closest('.cart-item').dataset.id;
+                    const quality = btn.closest('.cart-item').dataset.quality;
+                    const item = cart.find(item => item.id === itemId && item.quality === quality);
+                    
+                    if (item.quantity > 1) {
+                        item.quantity -= 1;
+                        updateCartDisplay();
+                        updateCartCount();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.plus-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = btn.closest('.cart-item').dataset.id;
+                    const quality = btn.closest('.cart-item').dataset.quality;
+                    const item = cart.find(item => item.id === itemId && item.quality === quality);
+                    
+                    item.quantity += 1;
+                    updateCartDisplay();
+                    updateCartCount();
+                });
+            });
+            
+            // Add event listeners to remove buttons
+            document.querySelectorAll('.cart-item-remove').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = btn.closest('.cart-item').dataset.id;
+                    const quality = btn.closest('.cart-item').dataset.quality;
+                    cart = cart.filter(item => !(item.id === itemId && item.quality === quality));
+                    updateCartDisplay();
+                    updateCartCount();
+                });
+            });
+        }
+
+        // Animation for cards when they come into view
+        const animateOnScroll = () => {
+            const cards = document.querySelectorAll('.item-card');
+            
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardTop < windowHeight - 100) {
+                    card.style.animation = 'fadeInUp 0.5s ease forwards';
+                }
+            });
+        };
+
+        // Initial animation
+        window.addEventListener('load', animateOnScroll);
+        
+        // Animation on scroll
+        window.addEventListener('scroll', animateOnScroll);
+        
+        // Search functionality
+        const searchInput = document.querySelector('.search-bar input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.item-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('.item-name').textContent.toLowerCase();
+                const category = card.querySelector('.item-category').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || category.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Add some cart notification styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .cart-notification {
+                position: fixed;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--primary);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .cart-notification.show {
+                opacity: 1;
+            }
+            .cart-notification i {
+                font-size: 1.2rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
